@@ -1,0 +1,11 @@
+C:\Users\Nick\AppData\Local\Temporary Projects\Class Maker\bin\Debug\Class Maker.exe.config
+C:\Users\Nick\Documents\Visual Studio 2012\Projects\Class Maker\Class Maker\bin\Debug\Class Maker.exe.config
+C:\Users\Nick\Documents\Visual Studio 2012\Projects\Class Maker\Class Maker\bin\Debug\Class Maker.exe
+C:\Users\Nick\Documents\Visual Studio 2012\Projects\Class Maker\Class Maker\bin\Debug\Class Maker.pdb
+C:\Users\Nick\Documents\Visual Studio 2012\Projects\Class Maker\Class Maker\bin\Debug\Class Maker.xml
+C:\Users\Nick\Documents\Visual Studio 2012\Projects\Class Maker\Class Maker\obj\Debug\Class_Maker.Form1.resources
+C:\Users\Nick\Documents\Visual Studio 2012\Projects\Class Maker\Class Maker\obj\Debug\Class_Maker.Resources.resources
+C:\Users\Nick\Documents\Visual Studio 2012\Projects\Class Maker\Class Maker\obj\Debug\Class Maker.vbproj.GenerateResource.Cache
+C:\Users\Nick\Documents\Visual Studio 2012\Projects\Class Maker\Class Maker\obj\Debug\Class Maker.exe
+C:\Users\Nick\Documents\Visual Studio 2012\Projects\Class Maker\Class Maker\obj\Debug\Class Maker.xml
+C:\Users\Nick\Documents\Visual Studio 2012\Projects\Class Maker\Class Maker\obj\Debug\Class Maker.pdb
