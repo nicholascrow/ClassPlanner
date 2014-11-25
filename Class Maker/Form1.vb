@@ -8,8 +8,11 @@ Public Class Form1
     Private C As New CookieContainer
     Private trd As Thread
 #End Region
+
+
 #Region "Events"
     Public Event Stats(Status As String)
+    Public Event Problem(Problem As String)
 #End Region
 
     ''' <summary>
@@ -52,10 +55,12 @@ Public Class Form1
     ''' <param name="ClassCodes">Class codes to insert.</param>
     ''' <remarks></remarks>
     Sub checkClasses(ClassCodes As String)
+        Dim statusCode As String = ""
         Try
             RaiseEvent Stats("Checking first classes page")
             Dim url = "https://act.ucsd.edu/scheduleOfClasses/scheduleOfClassesStudentResult.htm?selectedTerm=WI15&xsoc_term=&loggedIn=false&tabNum=&selectedSubjects=" + ClassCodes + "&_selectedSubjects=1&schedOption1=true&_schedOption1=on&_schedOption11=on&_schedOption12=on&schedOption2=true&_schedOption2=on&_schedOption4=on&_schedOption5=on&_schedOption3=on&_schedOption7=on&_schedOption8=on&_schedOption13=on&_schedOption10=on&_schedOption9=on&schDay=M&_schDay=on&schDay=T&_schDay=on&schDay=W&_schDay=on&schDay=R&_schDay=on&schDay=F&_schDay=on&schDay=S&_schDay=on&schStartTime=12%3A00&schStartAmPm=0&schEndTime=12%3A00&schEndAmPm=0&_selectedDepartments=1&schedOption1Dept=true&_schedOption1Dept=on&_schedOption11Dept=on&_schedOption12Dept=on&schedOption2Dept=true&_schedOption2Dept=on&_schedOption4Dept=on&_schedOption5Dept=on&_schedOption3Dept=on&_schedOption7Dept=on&_schedOption8Dept=on&_schedOption13Dept=on&_schedOption10Dept=on&_schedOption9Dept=on&schDayDept=M&_schDayDept=on&schDayDept=T&_schDayDept=on&schDayDept=W&_schDayDept=on&schDayDept=R&_schDayDept=on&schDayDept=F&_schDayDept=on&schDayDept=S&_schDayDept=on&schStartTimeDept=12%3A00&schStartAmPmDept=0&schEndTimeDept=12%3A00&schEndAmPmDept=0&courses=&sections=&instructorType=begin&instructor=&titleType=contain&title=&_hideFullSec=on&_showPopup=on"
             Dim request As HttpWebRequest = HttpWebRequest.Create(url)
+
             With request
                 .Referer = "https://act.ucsd.edu/scheduleOfClasses/scheduleOfClassesStudent.htm"
                 .UserAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.75 Safari/535.7"
@@ -69,11 +74,12 @@ Public Class Form1
                 Dim dataresponse As String = sr.ReadToEnd
                 RaiseEvent Stats("Grabbed a page of classes.")
                 displayMatches(dataresponse)
+                statusCode = response.StatusCode
             End With
 
             Pageinate(2)
         Catch ex As Exception
-            RaiseEvent Stats(ex.Message)
+            RaiseEvent Problem(ex.Message & " HTTP Status: " & statusCode)
         End Try
     End Sub
 
@@ -167,6 +173,10 @@ Public Class Form1
         ListView1.Columns(2).Width = 179
     End Sub
 
+    Private Sub Form1_Problem(Problem As String) Handles Me.Problem
+        TextBox2.AppendText(Problem & vbNewLine)
+    End Sub
+
 
     ''' <summary>
     ''' Post stats to text box.
@@ -176,4 +186,9 @@ Public Class Form1
     Private Sub Form1_Stats(Status As String) Handles Me.Stats
         TextBox2.AppendText(Status & vbNewLine)
     End Sub
+
+
+
+
+
 End Class
