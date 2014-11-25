@@ -5,35 +5,48 @@ Imports System.IO
 Imports System.Threading
 Public Class Form1
 #Region "Declarations"
-    Public C As New CookieContainer
-
+    Private C As New CookieContainer
+    Private trd As Thread
 #End Region
 #Region "Events"
     Public Event Stats(Status As String)
 #End Region
 
-    Private trd As Thread
-
+    ''' <summary>
+    ''' This method loads the main page of classes, and grabs cookies.
+    ''' </summary>
+    ''' <param name="ClassCode">The type of classes to search through.</param>
+    ''' <remarks>Default class code is CSE.</remarks>
     Sub loadClassesPage(Optional ByVal ClassCode As String = "CSE+")
+
+        'Post new status
         RaiseEvent Stats("Loading default classes page to grab cookies.")
+
+        'New web request at the beginning url
         Dim request As HttpWebRequest = HttpWebRequest.Create("https://act.ucsd.edu/scheduleOfClasses/scheduleOfClassesStudent.htm")
         With request
             .Referer = "http://www.google.com"
             .UserAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.75 Safari/535.7"
             .KeepAlive = True
-            .CookieContainer = C
+            .CookieContainer = C  'Main cookie container
             .Method = "GET"
 
             Dim response As System.Net.HttpWebResponse = .GetResponse
             Dim sr As System.IO.StreamReader = New System.IO.StreamReader(response.GetResponseStream())
+
+            'HTML code of response
             Dim dataresponse As String = sr.ReadToEnd
         End With
+
+        'new status after grabbing cookies
         RaiseEvent Stats("Finished grabbing cookies.")
+
+        'loads next page to start checking clases.
         checkClasses(ClassCode)
 
-
-
     End Sub
+
+
     Sub checkClasses(ClassCodes As String)
         Try
             RaiseEvent Stats("Checking first classes page")
