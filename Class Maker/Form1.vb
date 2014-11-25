@@ -2,7 +2,6 @@
 Imports System.Text
 Imports System.Text.RegularExpressions
 Imports System.IO
-Imports System.Web
 Imports System.Threading
 Public Class Form1
 #Region "Declarations"
@@ -47,16 +46,8 @@ Public Class Form1
                 .CookieContainer = C
                 .Method = "POST"
                 .Timeout = 2000
-                Dim sb As New StringBuilder
-
-                Dim byteArray As Byte() = Encoding.UTF8.GetBytes(sb.ToString)
-                .ContentLength = byteArray.Length
-                Dim dataStream As Stream = .GetRequestStream()
-                dataStream.Write(byteArray, 0, byteArray.Length)
-                dataStream.Close() : dataStream.Dispose() : dataStream = Nothing
 
                 Dim response As System.Net.HttpWebResponse = .GetResponse
-
                 Dim sr As System.IO.StreamReader = New System.IO.StreamReader(response.GetResponseStream())
                 Dim dataresponse As String = sr.ReadToEnd
                 RaiseEvent Stats("Grabbed a page of classes.")
@@ -70,7 +61,6 @@ Public Class Form1
 
     End Sub
     Sub displayMatches(data As String)
-        RaiseEvent Stats("Displaying matches:")
         Dim delim As String() = New String(0) {"title=""Final"">FI</span>"}
 
         Dim splitByClass = data.Split(delim, StringSplitOptions.RemoveEmptyEntries)
@@ -85,8 +75,10 @@ Public Class Form1
             For Each Match As Match In classCountMatches
                 seatsAvailable += Match.Groups(1).ToString()
             Next Match
-            ListBox1.Items.Add(classNameMatches(0).Groups(1).ToString().Replace("&amp;", " & ") & classNameMatches(0).Groups(2).ToString().Replace("&amp;", " &") & " has " & seatsAvailable & " seats available." & vbNewLine)
-
+            Dim item As ListViewItem = ListView1.Items.Add(classNameMatches(0).Groups(1).ToString().Replace("&amp;", " & "))
+            item.SubItems.Add(classNameMatches(0).Groups(2).ToString().Replace("&amp;", " &"))
+            item.SubItems.Add(seatsAvailable)
+            ListView1.Sort()
 
         Next i
 
@@ -129,6 +121,9 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Form1.CheckForIllegalCrossThreadCalls = False
+        ListView1.Columns(0).Width = 204
+        ListView1.Columns(1).Width = 545
+        ListView1.Columns(2).Width = 179
     End Sub
 
 
