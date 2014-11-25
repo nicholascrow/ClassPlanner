@@ -46,7 +46,11 @@ Public Class Form1
 
     End Sub
 
-
+    ''' <summary>
+    ''' This checks the first page of classes.
+    ''' </summary>
+    ''' <param name="ClassCodes">Class codes to insert.</param>
+    ''' <remarks></remarks>
     Sub checkClasses(ClassCodes As String)
         Try
             RaiseEvent Stats("Checking first classes page")
@@ -71,8 +75,14 @@ Public Class Form1
         Catch ex As Exception
             RaiseEvent Stats(ex.Message)
         End Try
-
     End Sub
+
+
+    ''' <summary>
+    ''' Uses regular expressions to check 
+    ''' </summary>
+    ''' <param name="data">Data to regex.</param>
+    ''' <remarks></remarks>
     Sub displayMatches(data As String)
         Dim delim As String() = New String(0) {"title=""Final"">FI</span>"}
 
@@ -89,13 +99,20 @@ Public Class Form1
                 seatsAvailable += Match.Groups(1).ToString()
             Next Match
             Dim item As ListViewItem = ListView1.Items.Add(classNameMatches(0).Groups(1).ToString().Replace("&amp;", " & "))
-            item.SubItems.Add(classNameMatches(0).Groups(2).ToString().Replace("&amp;", " &"))
+            item.SubItems.Add(classNameMatches(0).Groups(2).ToString().Replace("&amp;", " & "))
             item.SubItems.Add(seatsAvailable)
             ListView1.Sort()
 
         Next i
 
     End Sub
+
+
+    ''' <summary>
+    ''' Pageinate, go to the next page and grab data, recursively.
+    ''' </summary>
+    ''' <param name="x">Page number</param>
+    ''' <remarks></remarks>
      Sub Pageinate(x As Integer)
         RaiseEvent Stats("Loading next pageinated page, " & x & ".")
         Dim url = "https://act.ucsd.edu/scheduleOfClasses/scheduleOfClassesStudentResult.htm?page=" & x
@@ -124,14 +141,25 @@ Public Class Form1
     End Sub
 
 
-
+    ''' <summary>
+    ''' Button to start running the program
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         trd = New Thread(AddressOf loadClassesPage)
         trd.IsBackground = True
         trd.Start()
-
     End Sub
 
+
+    ''' <summary>
+    ''' Load of form, set things.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Form1.CheckForIllegalCrossThreadCalls = False
         ListView1.Columns(0).Width = 204
@@ -140,6 +168,11 @@ Public Class Form1
     End Sub
 
 
+    ''' <summary>
+    ''' Post stats to text box.
+    ''' </summary>
+    ''' <param name="Status"></param>
+    ''' <remarks></remarks>
     Private Sub Form1_Stats(Status As String) Handles Me.Stats
         TextBox2.AppendText(Status & vbNewLine)
     End Sub
